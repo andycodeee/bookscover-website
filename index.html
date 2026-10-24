@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Books Cover | Roblox UGC Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fde4f0;
+      --text: #d66a9c;
+      --text-hover: #b84a80;
+      color-scheme: light;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background: radial-gradient(ellipse at center, #fff3f9 0%, var(--bg) 45%, #f0a9cc 100%);
+      background-attachment: fixed;
+      font-family: "Fredoka", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .logo {
+      max-width: min(720px, 90vw);
+      width: 100%;
+      height: auto;
+      display: block;
+      mix-blend-mode: multiply;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-18px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .logo { animation: none; }
+    }
+
+    footer {
+      padding: 2rem 1rem 3rem;
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+
+    footer a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    footer a:hover,
+    footer a:focus-visible {
+      color: var(--text-hover);
+    }
+
+    .email {
+      text-align: center;
+      padding: 0 1rem 2rem;
+    }
+
+    .email a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.85rem;
+      opacity: 0.8;
+    }
+
+    .email a:hover,
+    .email a:focus-visible {
+      color: var(--text-hover);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <img class="logo" src="logo.png" alt="Books Cover logo">
+  </main>
+
+  <footer>
+    <a href="https://www.roblox.com/communities/15745994/Books-Cover" target="_blank" rel="noopener noreferrer">Our UGC</a>
+    <a href="https://www.roblox.com/games/91792913879834/AFK-for-Gyaru-UGC" target="_blank" rel="noopener noreferrer">Play AFK for UGC</a>
+  </footer>
+
+  <div class="email">
+    <a href="mailto:contact@bookscover.store">contact@bookscover.store</a>
+  </div>
+</body>
+</html>
