@@ -3,15 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" href="/favicon.ico">
+  <link rel="manifest" href="/site.webmanifest">
+  <script>
+    (() => {
+      const url = new URL(window.location.href);
+      let shouldRedirect = false;
+
+      if (url.hostname.toLowerCase() !== "www.bookscover.store") {
+        url.hostname = "www.bookscover.store";
+        shouldRedirect = true;
+      }
+
+      if (/\/index\.html$/i.test(url.pathname)) {
+        url.pathname = url.pathname.replace(/index\.html$/i, "");
+        shouldRedirect = true;
+      }
+
+      if (shouldRedirect) {
+        window.location.replace(url.href);
+      }
+    })();
+  </script>
   <title>Page Not Found | Books Cover</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #fde4f0;
-      --text: #d66a9c;
-      --text-hover: #b84a80;
+      --bg: #f7dce9;
+      --text: #b94f83;
+      --text-hover: #933b68;
       color-scheme: light;
     }
 
@@ -26,9 +51,12 @@
     }
 
     body {
-      background: radial-gradient(ellipse at center, #fff3f9 0%, var(--bg) 45%, #f0a9cc 100%);
+      background:
+        radial-gradient(ellipse at 50% 38%, rgba(255, 255, 255, 0.96) 0%, rgba(255, 248, 252, 0.92) 24%, transparent 62%),
+        radial-gradient(ellipse at 12% 14%, rgba(255, 249, 242, 0.78) 0%, transparent 42%),
+        linear-gradient(135deg, #fff0f7 0%, var(--bg) 52%, #edb4d0 100%);
       background-attachment: fixed;
-      font-family: "Fredoka", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: "Nunito", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
@@ -50,7 +78,6 @@
       width: 100%;
       height: auto;
       display: block;
-      mix-blend-mode: multiply;
       animation: float 4s ease-in-out infinite;
     }
 
@@ -62,7 +89,7 @@
     h1 {
       color: var(--text);
       font-size: clamp(3rem, 10vw, 5rem);
-      font-weight: 600;
+      font-weight: 800;
       line-height: 1;
     }
 
@@ -79,7 +106,7 @@
       border-radius: 999px;
       color: var(--text);
       text-decoration: none;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .home:hover,
@@ -100,7 +127,7 @@
       color: var(--text);
       text-decoration: none;
       font-size: 1.1rem;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 0.02em;
     }
 
@@ -136,7 +163,7 @@
     <img class="logo" src="logo.png" alt="Books Cover logo">
     <h1>404</h1>
     <p>Oops, this page doesn't exist.</p>
-    <a class="home" href="index.html">Back to home</a>
+    <a class="home" href="/">Back to home</a>
   </main>
 
   <footer>
