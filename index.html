@@ -4,161 +4,516 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="canonical" href="https://www.bookscover.store/">
-  <meta name="description" content="ugc store">
-  <meta name="theme-color" content="#f7dce9">
+  <meta name="description" content="Discover Roblox UGC and games from Books Cover.">
+  <meta name="theme-color" content="#ff61b5">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Books Cover">
-  <meta property="og:locale" content="en_US">
-  <meta property="og:url" content="https://www.bookscover.store/">
   <meta property="og:title" content="Books Cover | Roblox UGC Store">
-  <meta property="og:description" content="ugc store">
+  <meta property="og:description" content="Explore Roblox UGC from Books Cover.">
   <meta property="og:image" content="https://www.bookscover.store/logo.png">
-  <meta property="og:image:type" content="image/png">
-  <meta property="og:image:width" content="2000">
-  <meta property="og:image:height" content="2000">
-  <meta property="og:image:alt" content="Books Cover logo">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Books Cover | Roblox UGC Store">
-  <meta name="twitter:description" content="ugc store">
-  <meta name="twitter:image" content="https://www.bookscover.store/logo.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  <link rel="icon" href="/favicon.ico">
-  <link rel="manifest" href="/site.webmanifest">
-  <script>
-    (() => {
-      const url = new URL(window.location.href);
-      let shouldRedirect = false;
-
-      if (url.hostname.toLowerCase() !== "www.bookscover.store") {
-        url.hostname = "www.bookscover.store";
-        shouldRedirect = true;
-      }
-
-      if (/\/index\.html$/i.test(url.pathname)) {
-        url.pathname = url.pathname.replace(/index\.html$/i, "");
-        shouldRedirect = true;
-      }
-
-      if (shouldRedirect) {
-        window.location.replace(url.href);
-      }
-    })();
-  </script>
   <title>Books Cover | Roblox UGC Store</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f7dce9;
-      --text: #b94f83;
-      --text-hover: #933b68;
-      color-scheme: light;
+      --pink: #ff61b5;
+      --pink-dark: #d82c8a;
+      --ink: #fff;
+      --paper: rgba(255, 255, 255, .93);
+      --stroke: 3.7px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html, body {
-      height: 100%;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 92px; }
 
     body {
-      background:
-        radial-gradient(ellipse at 50% 38%, rgba(255, 255, 255, 0.96) 0%, rgba(255, 248, 252, 0.92) 24%, transparent 62%),
-        radial-gradient(ellipse at 12% 14%, rgba(255, 249, 242, 0.78) 0%, transparent 42%),
-        linear-gradient(135deg, #fff0f7 0%, var(--bg) 52%, #edb4d0 100%);
-      background-attachment: fixed;
-      font-family: "Nunito", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
       min-height: 100vh;
+      color: #fff;
+      font-family: "Fredoka", "Segoe UI", sans-serif;
+      background: linear-gradient(rgba(255, 38, 155, .32), rgba(255, 38, 155, .32)), url("background.jpg") center / cover fixed;
     }
 
-    main {
-      flex: 1;
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    h1, h2, p, a, button, .nav-logo-text, .item-price, .item-count, .catalog-message, .banner-label, .credit-name, .credit-role, .footer {
+      font-family: "Fredoka", "Segoe UI", sans-serif;
+      color: #fff;
+      -webkit-text-stroke: var(--stroke) var(--pink);
+      paint-order: stroke fill;
+    }
+
+    .topbar {
+      position: fixed;
+      z-index: 20;
+      inset: 0 0 auto;
+      min-height: 76px;
+      padding: 10px 6%;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
+      gap: 24px;
+      background: transparent;
+      border: 0;
+      backdrop-filter: none;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-100%);
+      transition: opacity .25s ease, transform .25s ease, visibility .25s;
     }
 
-    .logo {
-      max-width: min(720px, 90vw);
-      width: 100%;
-      height: auto;
-      display: block;
-      animation: float 4s ease-in-out infinite;
+    .topbar.is-visible { opacity: 1; visibility: visible; transform: translateY(0); }
+    .nav-links { display: flex; align-items: center; justify-content: center; gap: 26px; flex-wrap: wrap; }
+    .nav-links a { font-weight: 700; transition: transform .2s; }
+    .nav-links a:hover, .nav-links a:focus-visible { transform: translateY(-2px); }
+
+    .hero {
+      min-height: 100svh;
+      padding: 42px 20px;
+      display: grid;
+      place-items: center;
+      text-align: center;
     }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-18px); }
+    .hero-content { width: min(760px, 100%); }
+    .hero-logo { display: block; width: min(620px, 90vw); height: auto; margin: 0 auto; animation: float 4s ease-in-out infinite; }
+
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+
+    .section { padding: 88px 7%; }
+    .shop { min-height: 90vh; background: transparent; }
+    .container { max-width: 1240px; margin: 0 auto; }
+    .section-heading { margin: 0 auto 36px; text-align: center; }
+    .section-heading h1 { font-size: clamp(36px, 5vw, 50px); font-weight: 700; }
+    .section-heading p { margin-top: 8px; font-size: 17px; }
+    .shop-controls { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+    .search {
+      min-height: 58px;
+      padding: 12px 22px;
+      border: 0;
+      outline: none;
+      background: url("search.png") center / 100% 100% no-repeat;
+      color: #fff;
+      font: 700 16px "Fredoka", "Segoe UI", sans-serif;
+      -webkit-text-stroke: 1.4px var(--pink-dark);
+      paint-order: stroke fill;
+      filter: saturate(1.25);
+    }
+    .search { width: min(330px, 100%); }
+    .search:focus { filter: saturate(1.55) drop-shadow(0 3px 8px rgba(157, 15, 92, .3)); }
+    .search::placeholder { color: #fff; opacity: 1; }
+    .catalog-meta { display: flex; justify-content: center; align-items: center; gap: 12px; min-height: 28px; margin-bottom: 14px; font-size: 14px; }
+    .catalog-message { color: #fff; }
+    .catalog-message a { text-decoration: underline; font-weight: 700; }
+    .items { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 250px)); justify-content: center; gap: 28px 22px; perspective: 1000px; }
+    .item { position: relative; display: block; aspect-ratio: 978 / 1100; min-width: 0; background: url("ugcframe.png") center / 100% 100% no-repeat; }
+    .item-image { position: absolute; z-index: 2; top: 50%; left: 50%; width: 82%; height: 54%; display: grid; place-items: center; overflow: visible; transform: translate(-50%, -50%); }
+    .item-image img { width: 100%; height: 100%; object-fit: contain; object-position: center; transform: scale(1.25); transition: transform .35s cubic-bezier(.2,.8,.2,1); filter: drop-shadow(0 9px 8px rgba(123, 16, 75, .28)); }
+    .item:hover .item-image img, .item:focus-visible .item-image img { transform: scale(1.38) rotate(3deg); }
+    .image-placeholder { color: #fff; font-weight: 700; -webkit-text-stroke: var(--stroke) var(--pink); paint-order: stroke fill; }
+    .item-price { position: absolute; z-index: 3; right: 12%; bottom: 12%; display: inline-flex; align-items: center; gap: 5px; max-width: 75%; color: #fff; font-size: clamp(14px, 1.5vw, 18px); font-weight: 700; text-align: right; white-space: nowrap; }
+    .item-price img { width: 23px; height: 23px; object-fit: contain; filter: drop-shadow(0 2px 3px rgba(121, 21, 76, .35)); }
+    .item-price.is-text-only img { display: none; }
+    .empty { grid-column: 1 / -1; padding: 54px 20px; border-radius: 14px; background: var(--paper); color: #fff; text-align: center; -webkit-text-stroke: var(--stroke) var(--pink); paint-order: stroke fill; }
+    .load-more-wrap { display: flex; justify-content: center; margin-top: 28px; }
+    .load-more, .play-button {
+      padding: 14px 32px;
+      border: 0;
+      border-radius: 0;
+      appearance: none;
+      background: url("search.png") center / 100% 100% no-repeat;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+      filter: none;
+      box-shadow: none;
+      transition: transform .2s;
+    }
+    .load-more:hover, .play-button:hover,
+    .load-more:focus-visible, .play-button:focus-visible {
+      background: url("search.png") center / 100% 100% no-repeat;
+      color: #fff;
+      transform: translateY(-2px);
+      filter: none;
+      box-shadow: none;
+    }
+    .load-more:active, .play-button:active {
+      background: url("search.png") center / 100% 100% no-repeat;
+      color: #fff;
+      filter: none;
+      transform: translateY(0);
+    }
+    .load-more:disabled { opacity: .6; cursor: wait; }
+
+    .game { background: transparent; }
+    .game-container { max-width: 1080px; margin: auto; }
+    .game-banner { position: relative; aspect-ratio: 16 / 7; overflow: hidden; border: 3px solid var(--pink); border-radius: 18px; background: linear-gradient(135deg, #ffb7da, #f7dce9); box-shadow: 0 12px 30px rgba(129, 53, 89, .12); }
+    .game-banner img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.04); transition: opacity 1s, transform 7s; }
+    .game-banner img.active { opacity: 1; transform: scale(1.1); }
+    .banner-overlay { position: absolute; inset: 0; background: linear-gradient(transparent 45%, rgba(80, 20, 55, .4)); pointer-events: none; }
+    .banner-label { position: absolute; bottom: 20px; left: 24px; z-index: 1; color: #fff; font-size: 24px; font-weight: 700; text-shadow: 0 2px 6px rgba(0, 0, 0, .35); }
+    .game-play { display: flex; justify-content: center; margin-top: 30px; }
+    .play-button { padding: 14px 48px; font-size: 20px; }
+    .game-credits { margin-top: 64px; text-align: center; }
+    .game-credits h2 { margin-bottom: 22px; font-size: 30px; }
+    .credit-people { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
+    .credit-person { display: flex; align-items: center; gap: 13px; min-width: 220px; padding: 13px 18px; border: 1px solid rgba(255, 97, 181, .38); border-radius: 12px; background: var(--paper); text-align: left; }
+    .credit-person img { width: 58px; height: 58px; border: 2px solid var(--pink); border-radius: 50%; background: #f7dce9; object-fit: cover; }
+    .credit-name { font-size: 18px; font-weight: 700; }
+    .credit-role { margin-top: 3px; font-size: 13px; }
+    .footer { display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; padding: 24px 7%; border-top: 0; background: transparent; font-size: 16px; }
+    .footer-title { display: block; margin-bottom: 5px; font-size: 18px; font-weight: 700; }
+    .footer-contact { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+    .footer-contact a { font-weight: 600; }
+    .footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 900px) {
+      .items { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 250px)); }
+      .topbar { padding-inline: 3%; }
+      .nav-links { gap: 15px; }
+    }
+
+    @media (max-width: 620px) {
+      .topbar { min-height: 68px; padding: 8px 12px; gap: 8px; }
+      .nav-brand img { width: 38px; height: 38px; }
+      .nav-logo-text { font-size: 17px; }
+      .nav-links { gap: 8px 13px; }
+      .nav-links a { font-size: 12px; }
+      .section { padding: 66px 5%; }
+      .shop-controls { align-items: stretch; }
+      .search { width: 100%; }
+      .items { grid-template-columns: repeat(auto-fit, minmax(min(100%, 155px), 220px)); gap: 13px; }
+      .item-price { right: 11%; bottom: 12%; font-size: 13px; }
+      .item-price img { width: 19px; height: 19px; }
+      .search { width: 100%; }
+      .game-banner { aspect-ratio: 16 / 9; }
+      .banner-label { bottom: 13px; left: 14px; font-size: 18px; }
+      .footer { flex-direction: column; text-align: center; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .logo { animation: none; }
-    }
-
-    footer {
-      padding: 2rem 1rem 3rem;
-      display: flex;
-      justify-content: center;
-      gap: 2.5rem;
-      flex-wrap: wrap;
-      text-align: center;
-    }
-
-    footer a {
-      color: var(--text);
-      text-decoration: none;
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-    }
-
-    footer a:hover,
-    footer a:focus-visible {
-      color: var(--text-hover);
-    }
-
-    .email {
-      text-align: center;
-      padding: 0 1rem 2rem;
-    }
-
-    .email a {
-      color: var(--text);
-      text-decoration: none;
-      font-size: 0.85rem;
-      opacity: 0.8;
-    }
-
-    .email a:hover,
-    .email a:focus-visible {
-      color: var(--text-hover);
-      opacity: 1;
+      *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
     }
   </style>
 </head>
 <body>
+  <header class="topbar" id="topbar" aria-label="Main navigation">
+    <nav class="nav-links" aria-label="Main navigation links">
+      <a href="#home">Home</a>
+      <a href="#shop">Our UGC</a>
+      <a href="#game">AFK for Gyaru UGC</a>
+      <a href="https://discord.gg/bookscover" target="_blank" rel="noopener noreferrer">Discord</a>
+    </nav>
+  </header>
+
   <main>
-    <img class="logo" src="logo.png" alt="Books Cover logo">
+    <section class="hero" id="home" aria-label="Books Cover">
+      <div class="hero-content">
+        <img class="hero-logo" src="logo.png" alt="Books Cover logo">
+      </div>
+    </section>
+
+    <section class="section shop" id="shop">
+      <div class="container">
+        <div class="section-heading">
+          <h1>Our Collection</h1>
+          <p>Shop the latest items from the Books Cover Roblox group.</p>
+        </div>
+        <div class="shop-controls">
+          <input class="search" id="search" type="search" placeholder="Search UGC..." autocomplete="off" aria-label="Search UGC">
+        </div>
+        <div class="catalog-meta">
+          <span id="itemCount" aria-live="polite">Loading group UGC...</span>
+          <span id="catalogMessage" class="catalog-message"></span>
+        </div>
+        <div class="items" id="items" aria-live="polite"></div>
+        <div class="load-more-wrap"><button class="load-more" id="loadMore" type="button" hidden>Load more items</button></div>
+      </div>
+    </section>
+
+    <section class="section game" id="game">
+      <div class="game-container">
+        <div class="section-heading">
+          <h1>AFK for Gyaru UGC</h1>
+          <p>Stay AFK, collect minutes, and get your favorite UGC!</p>
+        </div>
+        <div class="game-banner" id="gameBanner" aria-label="AFK for Gyaru UGC game images">
+          <div class="banner-overlay"></div>
+          <div class="banner-label">AFK for Gyaru UGC</div>
+        </div>
+        <div class="game-play"><a class="play-button" href="https://www.roblox.com/games/91792913879834/AFK-for-Gyaru-UGC" target="_blank" rel="noopener noreferrer">PLAY NOW</a></div>
+        <div class="game-credits">
+          <h2>Created by</h2>
+          <div class="credit-people">
+            <div class="credit-person"><img id="andyAvatar" src="logo.png" alt="andycodee Roblox avatar" loading="lazy"><div><div class="credit-name">andycodee</div><div class="credit-role">Developer</div></div></div>
+            <div class="credit-person"><img id="elovainAvatar" src="logo.png" alt="elovain Roblox avatar" loading="lazy"><div><div class="credit-name">elovain</div><div class="credit-role">Developer</div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <footer>
-    <a href="https://www.roblox.com/communities/15745994/Books-Cover" target="_blank" rel="noopener noreferrer">Our UGC</a>
-    <a href="https://www.roblox.com/games/91792913879834/AFK-for-Gyaru-UGC" target="_blank" rel="noopener noreferrer">Play AFK for UGC</a>
-    <a href="https://discord.gg/bookscover" target="_blank" rel="noopener noreferrer">Join our Discord</a>
+  <footer class="footer">
+    <span>© 2026 Books Cover</span>
+    <div>
+      <span class="footer-title">Business inquiries</span>
+      <div class="footer-contact">
+        <a href="mailto:majestic@bookscover.store">majestic@bookscover.store</a>
+        <a href="https://discord.gg/bookscover" target="_blank" rel="noopener noreferrer">Discord: majesticdoll</a>
+      </div>
+    </div>
   </footer>
 
-  <div class="email">
-    <a href="mailto:contact@bookscover.store">contact@bookscover.store</a>
-  </div>
+  <script>
+    "use strict";
+
+    const GROUP_ID = "15745994";
+    const PLACE_ID = "91792913879834";
+    const ROBLOX_GROUP_URL = `https://www.roblox.com/communities/${GROUP_ID}/Books-Cover`;
+    const products = new Map();
+    let nextPageCursor = "";
+    let catalogLoading = false;
+
+    const itemsContainer = document.getElementById("items");
+    const searchInput = document.getElementById("search");
+    const itemCount = document.getElementById("itemCount");
+    const loadMoreButton = document.getElementById("loadMore");
+    const catalogMessage = document.getElementById("catalogMessage");
+
+    function productPrice(product) {
+      if (product.offSale) return "Off sale";
+      if (product.price === 0) return "Free";
+      if (Number.isFinite(product.price) && product.price > 0) return product.price.toLocaleString("en-US");
+      return "See on Roblox";
+    }
+
+    function renderItems() {
+      const query = searchInput.value.trim().toLocaleLowerCase();
+      const filtered = [...products.values()].filter(product => {
+        const matchesSearch = `${product.name} ${product.description || ""}`.toLocaleLowerCase().includes(query);
+        return matchesSearch;
+      });
+
+      itemCount.textContent = products.size
+        ? `Showing ${filtered.length} of ${products.size} items${nextPageCursor ? " · more available" : ""}`
+        : "No group items loaded";
+
+      if (!filtered.length) {
+        itemsContainer.innerHTML = "";
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = products.size ? "No items match your search." : "We couldn't load the catalog right now. Visit the official group store to browse the UGC.";
+        itemsContainer.append(empty);
+        return;
+      }
+
+      itemsContainer.replaceChildren(...filtered.map(product => {
+        const card = document.createElement("a");
+        card.className = "item";
+        card.href = product.itemType === "Bundle"
+          ? `https://www.roblox.com/bundles/${encodeURIComponent(product.id)}`
+          : `https://www.roblox.com/catalog/${encodeURIComponent(product.id)}`;
+        card.target = "_blank";
+        card.rel = "noopener noreferrer";
+        const accessiblePrice = Number.isFinite(product.price) && product.price > 0
+          ? `${productPrice(product)} Robux`
+          : productPrice(product);
+        card.setAttribute("aria-label", `${product.name}, ${accessiblePrice}. View on Roblox`);
+        card.title = product.name;
+
+        const imageFrame = document.createElement("div");
+        imageFrame.className = "item-image";
+        if (product.imageUrl) {
+          const image = document.createElement("img");
+          image.src = product.imageUrl;
+          image.alt = "";
+          image.loading = "lazy";
+          imageFrame.append(image);
+        }
+
+        const price = document.createElement("div");
+        price.className = "item-price";
+        const showRobuxIcon = !product.offSale && Number.isFinite(product.price) && product.price > 0;
+        if (showRobuxIcon) {
+          const icon = document.createElement("img");
+          icon.src = "RobuxBadge.png";
+          icon.alt = "Robux";
+          icon.loading = "lazy";
+          price.append(icon);
+        } else {
+          price.classList.add("is-text-only");
+        }
+        const amount = document.createElement("span");
+        amount.textContent = productPrice(product);
+        price.append(amount);
+        card.append(imageFrame, price);
+        return card;
+      }));
+    }
+
+    async function loadThumbnails(items) {
+      const assets = items.filter(item => item.itemType !== "Bundle");
+      const bundles = items.filter(item => item.itemType === "Bundle");
+
+      async function loadBatch(batch, endpoint, idParameter) {
+        if (!batch.length) return;
+        const url = new URL(endpoint);
+        url.search = new URLSearchParams({
+          [idParameter]: batch.map(item => item.id).join(","),
+          size: "420x420",
+          format: "Png",
+          isCircular: "false"
+        });
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`Thumbnail request failed (${response.status}).`);
+        const result = await response.json();
+        for (const thumbnail of result.data || []) {
+          const product = products.get(String(thumbnail.targetId));
+          if (product && thumbnail.state === "Completed" && thumbnail.imageUrl) {
+            product.imageUrl = thumbnail.imageUrl;
+          }
+        }
+      }
+
+      try {
+        for (let start = 0; start < assets.length; start += 50) {
+          await loadBatch(assets.slice(start, start + 50), "https://thumbnails.roblox.com/v1/assets", "assetIds");
+        }
+        for (let start = 0; start < bundles.length; start += 50) {
+          await loadBatch(bundles.slice(start, start + 50), "https://thumbnails.roblox.com/v1/bundles/thumbnails", "bundleIds");
+        }
+      } catch (error) {
+        console.warn("Some UGC thumbnails could not be loaded:", error);
+      }
+      renderItems();
+    }
+
+    async function loadCatalog(append = false) {
+      if (catalogLoading) return;
+      catalogLoading = true;
+      if (!append) {
+        products.clear();
+        nextPageCursor = "";
+        itemsContainer.replaceChildren();
+        loadMoreButton.hidden = true;
+      }
+      loadMoreButton.disabled = true;
+      loadMoreButton.textContent = "Loading...";
+      catalogMessage.textContent = "";
+      if (!append) itemCount.textContent = "Loading group UGC...";
+
+      try {
+        const params = new URLSearchParams({
+          Category: "3",
+          CreatorType: "2",
+          CreatorTargetId: GROUP_ID,
+          Limit: "30",
+          SortType: "5"
+        });
+        if (append && nextPageCursor) params.set("Cursor", nextPageCursor);
+        const response = await fetch(`https://catalog.roblox.com/v1/search/items/details?${params}`);
+        if (!response.ok) throw new Error(`Catalog request failed (${response.status}).`);
+        const result = await response.json();
+        const freshItems = (result.data || []).map(item => ({ ...item, id: String(item.id) }));
+        freshItems.forEach(item => products.set(item.id, item));
+        nextPageCursor = result.nextPageCursor || "";
+        loadMoreButton.hidden = !nextPageCursor;
+        renderItems();
+        void loadThumbnails(freshItems);
+      } catch (error) {
+        console.error("Books Cover UGC could not be loaded:", error);
+        if (!products.size) {
+          catalogMessage.innerHTML = `<a href="${ROBLOX_GROUP_URL}" target="_blank" rel="noopener noreferrer">Open the official Roblox group store</a>`;
+          itemCount.textContent = "The Roblox catalog couldn't be reached from this browser.";
+          renderItems();
+        } else {
+          catalogMessage.textContent = "Couldn't load more items. Try again later.";
+        }
+      } finally {
+        catalogLoading = false;
+        loadMoreButton.disabled = false;
+        loadMoreButton.textContent = "Load more items";
+      }
+    }
+
+    searchInput.addEventListener("input", renderItems);
+    loadMoreButton.addEventListener("click", () => loadCatalog(true));
+    void loadCatalog();
+
+    // Reveal the navigation as the landing section scrolls away.
+    const topbar = document.getElementById("topbar");
+    const hero = document.getElementById("home");
+    const updateNavigationVisibility = () => {
+      topbar.classList.toggle("is-visible", window.scrollY >= hero.offsetHeight - 120);
+    };
+    window.addEventListener("scroll", updateNavigationVisibility, { passive: true });
+    updateNavigationVisibility();
+
+    async function getGameInformation() {
+      try {
+        const universeResponse = await fetch(`https://apis.roblox.com/universes/v1/places/${PLACE_ID}/universe`);
+        if (!universeResponse.ok) throw new Error("Could not find the game's universe.");
+        const { universeId } = await universeResponse.json();
+        if (!universeId) throw new Error("Game universe was not returned.");
+        await loadGameThumbnails(universeId);
+      } catch (error) {
+        console.error("Roblox game information error:", error);
+      }
+    }
+
+    async function loadGameThumbnails(universeId) {
+      const url = new URL("https://thumbnails.roblox.com/v1/games/multiget/thumbnails");
+      url.search = new URLSearchParams({ universeIds: String(universeId), countPerUniverse: "10", defaults: "true", size: "768x432", format: "Png", isCircular: "false" });
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Game images are unavailable.");
+      const result = await response.json();
+      const images = (result.data || []).flatMap(game => game.thumbnails || []).map(item => item.imageUrl).filter(Boolean);
+      if (!images.length) return;
+      const banner = document.getElementById("gameBanner");
+      images.forEach((source, index) => {
+        const image = document.createElement("img");
+        image.src = source;
+        image.alt = index === 0 ? "AFK for Gyaru UGC game thumbnail" : "";
+        image.className = index === 0 ? "active" : "";
+        image.loading = index === 0 ? "eager" : "lazy";
+        banner.insertBefore(image, banner.querySelector(".banner-overlay"));
+      });
+      if (images.length > 1) {
+        let current = 0;
+        window.setInterval(() => {
+          const slides = banner.querySelectorAll("img");
+          slides[current]?.classList.remove("active");
+          current = (current + 1) % slides.length;
+          slides[current]?.classList.add("active");
+        }, 5000);
+      }
+    }
+
+    async function loadRobloxAvatar(username, imageId) {
+      try {
+        const searchUrl = new URL("https://users.roblox.com/v1/users/search");
+        searchUrl.search = new URLSearchParams({ keyword: username, limit: "10" });
+        const searchResponse = await fetch(searchUrl);
+        if (!searchResponse.ok) throw new Error("User search failed.");
+        const searchData = await searchResponse.json();
+        const user = searchData.data?.find(item => item.name?.toLowerCase() === username.toLowerCase());
+        if (!user) throw new Error("User not found.");
+        const avatarUrl = new URL("https://thumbnails.roblox.com/v1/users/avatar-headshot");
+        avatarUrl.search = new URLSearchParams({ userIds: String(user.id), size: "150x150", format: "Png", isCircular: "true" });
+        const avatarResponse = await fetch(avatarUrl);
+        if (!avatarResponse.ok) throw new Error("Avatar unavailable.");
+        const avatar = (await avatarResponse.json()).data?.[0]?.imageUrl;
+        if (avatar) document.getElementById(imageId).src = avatar;
+      } catch (error) {
+        console.warn(`Could not load ${username}'s avatar:`, error);
+      }
+    }
+
+    void getGameInformation();
+    void loadRobloxAvatar("andycodee", "andyAvatar");
+    void loadRobloxAvatar("elovain", "elovainAvatar");
+  </script>
 </body>
 </html>
