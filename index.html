@@ -77,10 +77,31 @@
       text-align: center;
     }
 
-    .hero-content { width: min(760px, 100%); }
-    .hero-logo { display: block; width: min(620px, 90vw); height: auto; margin: 0 auto; animation: float 4s ease-in-out infinite; }
+    .hero-content { width: min(760px, 100%); display: flex; flex-direction: column; align-items: center; }
+    .hero-logo { display: block; width: min(620px, 90vw); height: auto; margin: 0 auto 18px; filter: drop-shadow(0 18px 18px rgba(160, 19, 98, .16)); animation: heroFloat 4.8s ease-in-out infinite; }
 
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+    @keyframes heroFloat {
+      0%, 100% { transform: translateY(0) rotate(-1deg); }
+      50% { transform: translateY(-16px) rotate(1.5deg); }
+    }
+
+    .hero-tagline {
+      margin-bottom: 22px;
+      font-size: clamp(16px, 2vw, 20px);
+      font-weight: 600;
+      -webkit-text-stroke: 2.2px var(--pink-dark);
+      paint-order: stroke fill;
+    }
+
+    .hero-actions { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    .hero-action {
+      min-width: 155px;
+      padding: 12px 22px;
+      background: url("search.png") center / 100% 100% no-repeat;
+      font-weight: 700;
+      transition: transform .2s;
+    }
+    .hero-action:hover, .hero-action:focus-visible { transform: translateY(-3px) rotate(-1deg); }
 
     .section { padding: 88px 7%; }
     .shop { min-height: 90vh; background: transparent; }
@@ -97,13 +118,13 @@
       background: url("search.png") center / 100% 100% no-repeat;
       color: #fff;
       font: 700 16px "Fredoka", "Segoe UI", sans-serif;
-      -webkit-text-stroke: 1.4px var(--pink-dark);
-      paint-order: stroke fill;
-      filter: saturate(1.25);
+      -webkit-text-stroke: 0;
+      paint-order: normal;
+      filter: none;
     }
     .search { width: min(330px, 100%); }
-    .search:focus { filter: saturate(1.55) drop-shadow(0 3px 8px rgba(157, 15, 92, .3)); }
-    .search::placeholder { color: #fff; opacity: 1; }
+    .search:focus { filter: none; }
+    .search:focus-visible { outline: none; }
     .catalog-meta { display: flex; justify-content: center; align-items: center; gap: 12px; min-height: 28px; margin-bottom: 14px; font-size: 14px; }
     .catalog-message { color: #fff; }
     .catalog-message a { text-decoration: underline; font-weight: 700; }
@@ -212,6 +233,11 @@
     <section class="hero" id="home" aria-label="Books Cover">
       <div class="hero-content">
         <img class="hero-logo" src="logo.png" alt="Books Cover logo">
+        <p class="hero-tagline">Cute gyaru UGC, made for the books.</p>
+        <div class="hero-actions">
+          <a class="hero-action" href="#shop">Browse UGC</a>
+          <a class="hero-action" href="#game">Play Now</a>
+        </div>
       </div>
     </section>
 
@@ -256,7 +282,10 @@
   </main>
 
   <footer class="footer">
-    <span>© 2026 Books Cover</span>
+    <div>
+      <span>© 2026 Books Cover</span>
+      <span> · Made by <a href="https://andycodee.com" target="_blank" rel="noopener noreferrer">andycodee.com</a></span>
+    </div>
     <div>
       <span class="footer-title">Business inquiries</span>
       <div class="footer-contact">
@@ -275,6 +304,8 @@
     const products = new Map();
     let nextPageCursor = "";
     let catalogLoading = false;
+    let searchMode = false;
+    let searchTimer = null;
 
     function robloxApi(endpoint, params = new URLSearchParams()) {
       const url = new URL("/api/roblox", window.location.origin);
@@ -297,11 +328,7 @@
     }
 
     function renderItems() {
-      const query = searchInput.value.trim().toLocaleLowerCase();
-      const filtered = [...products.values()].filter(product => {
-        const matchesSearch = `${product.name} ${product.description || ""}`.toLocaleLowerCase().includes(query);
-        return matchesSearch;
-      });
+      const filtered = [...products.values()];
 
       itemCount.textContent = products.size
         ? `Showing ${filtered.length} of ${products.size} items${nextPageCursor ? " · more available" : ""}`
@@ -418,6 +445,7 @@
           Limit: "30",
           SortType: "5"
         });
+        if (searchMode && searchInput.value.trim()) params.set("Keyword", searchInput.value.trim());
         if (append && nextPageCursor) params.set("Cursor", nextPageCursor);
         const response = await fetch(robloxApi("catalogSearch", params));
         if (!response.ok) throw new Error(`Catalog request failed (${response.status}).`);
@@ -444,7 +472,14 @@
       }
     }
 
-    searchInput.addEventListener("input", renderItems);
+    searchInput.addEventListener("input", () => {
+      window.clearTimeout(searchTimer);
+      searchTimer = window.setTimeout(() => {
+        searchMode = Boolean(searchInput.value.trim());
+        if (!searchMode) catalogMessage.textContent = "";
+        void loadCatalog(false);
+      }, 350);
+    });
     loadMoreButton.addEventListener("click", () => loadCatalog(true));
     void loadCatalog();
 
@@ -508,15 +543,16 @@
         const avatarResponse = await fetch(robloxApi("avatarHeadshot", avatarParams));
         if (!avatarResponse.ok) throw new Error("Avatar unavailable.");
         const avatar = (await avatarResponse.json()).data?.[0]?.imageUrl;
-        if (avatar) document.getElementById(imageId).src = avatar;
+        if (avatarId === "andyAvatar") document.getElementById("andyAvatar").src = avatar;
+        if (avatarId === "elovainAvatar") document.getElementById("elovainAvatar").src = avatar;
       } catch (error) {
-        console.warn(`Could not load ${username}'s avatar:`, error);
+        console.error("Roblox avatar loading error:", error);
       }
     }
 
-    void getGameInformation();
-    void loadRobloxAvatar("andycodee", "andyAvatar");
-    void loadRobloxAvatar("Elovain", "elovainAvatar");
+    getGameInformation();
+    loadRobloxAvatar("andycodee", "andyAvatar");
+    loadRobloxAvatar("elovain", "elovainAvatar");
   </script>
 </body>
 </html>
