@@ -120,10 +120,14 @@
       pointer-events: none;
     }
     .hero-ugc.is-visible { opacity: 1; }
-    .hero-ugc-left-top { left: 9%; top: 16%; animation: ugcWobbleLeft 4s ease-in-out infinite; }
-    .hero-ugc-left-bottom { left: 12%; bottom: 13%; animation: ugcWobbleLeft 4.8s ease-in-out infinite reverse; }
-    .hero-ugc-right-top { right: 9%; top: 16%; animation: ugcWobbleRight 4.2s ease-in-out infinite; }
-    .hero-ugc-right-bottom { right: 12%; bottom: 13%; animation: ugcWobbleRight 4.9s ease-in-out infinite reverse; }
+    .hero-ugc-left-top { left: 19%; top: 15%; animation: ugcWobbleLeft 4s ease-in-out infinite; }
+    .hero-ugc-left-upper { left: 7%; top: 31%; width: clamp(68px, 8vw, 125px); animation: ugcWobbleLeft 4.2s ease-in-out infinite reverse; }
+    .hero-ugc-left-middle { left: 17%; top: 49%; width: clamp(72px, 8.5vw, 132px); animation: ugcWobbleLeft 4.4s ease-in-out infinite; }
+    .hero-ugc-left-bottom { left: 8%; bottom: 10%; animation: ugcWobbleLeft 4.8s ease-in-out infinite reverse; }
+    .hero-ugc-right-top { right: 19%; top: 15%; animation: ugcWobbleRight 4.2s ease-in-out infinite; }
+    .hero-ugc-right-upper { right: 7%; top: 31%; width: clamp(68px, 8vw, 125px); animation: ugcWobbleRight 4.4s ease-in-out infinite reverse; }
+    .hero-ugc-right-middle { right: 17%; top: 49%; width: clamp(72px, 8.5vw, 132px); animation: ugcWobbleRight 4.6s ease-in-out infinite; }
+    .hero-ugc-right-bottom { right: 8%; bottom: 10%; animation: ugcWobbleRight 4.9s ease-in-out infinite reverse; }
     @keyframes ugcWobbleLeft {
       0%, 100% { transform: rotate(-7deg) translateY(0); }
       50% { transform: rotate(4deg) translateY(-12px); }
@@ -263,10 +267,14 @@
       .hero-side-left { left: -82px; }
       .hero-side-right { right: -82px; }
       .hero-ugc { width: clamp(48px, 14vw, 72px); }
-      .hero-ugc-left-top { left: 2%; top: 18%; }
-      .hero-ugc-left-bottom { left: 4%; bottom: 14%; }
-      .hero-ugc-right-top { right: 2%; top: 18%; }
-      .hero-ugc-right-bottom { right: 4%; bottom: 14%; }
+      .hero-ugc-left-top { left: 3%; top: 22%; }
+      .hero-ugc-left-upper { left: 1%; top: 8%; }
+      .hero-ugc-left-middle { left: 3%; top: 43%; }
+      .hero-ugc-left-bottom { left: 6%; bottom: 10%; }
+      .hero-ugc-right-top { right: 3%; top: 22%; }
+      .hero-ugc-right-upper { right: 1%; top: 8%; }
+      .hero-ugc-right-middle { right: 3%; top: 43%; }
+      .hero-ugc-right-bottom { right: 6%; bottom: 10%; }
       .topbar { min-height: 68px; padding: 8px 12px; gap: 8px; }
       .nav-brand img { width: 38px; height: 38px; }
       .nav-logo-text { font-size: 17px; }
@@ -303,9 +311,13 @@
     <section class="hero" id="home" aria-label="Books Cover">
       <img class="hero-side hero-side-left" src="noFilter (8).png" alt="">
       <img class="hero-side hero-side-right" src="noFilter (9).png" alt="">
-      <img class="hero-ugc hero-ugc-left-top" id="heroUgcLeftTop" alt="" loading="eager">
+      <img class="hero-ugc hero-ugc-left-top" id="heroUgcLeft" alt="" loading="eager">
+      <img class="hero-ugc hero-ugc-left-upper" id="heroUgcLeftUpper" alt="" loading="eager">
+      <img class="hero-ugc hero-ugc-left-middle" id="heroUgcLeftMiddle" alt="" loading="eager">
       <img class="hero-ugc hero-ugc-left-bottom" id="heroUgcLeftBottom" alt="" loading="eager">
       <img class="hero-ugc hero-ugc-right-top" id="heroUgcRightTop" alt="" loading="eager">
+      <img class="hero-ugc hero-ugc-right-upper" id="heroUgcRightUpper" alt="" loading="eager">
+      <img class="hero-ugc hero-ugc-right-middle" id="heroUgcRightMiddle" alt="" loading="eager">
       <img class="hero-ugc hero-ugc-right-bottom" id="heroUgcRightBottom" alt="" loading="eager">
       <div class="hero-content">
         <img class="hero-logo" src="logo.png" alt="Books Cover logo">
@@ -529,14 +541,16 @@
           CreatorType: "2",
           CreatorTargetId: GROUP_ID,
           Limit: "30",
-          SortType: "5"
+          SortType: "1"
         });
         if (searchMode && searchInput.value.trim()) params.set("Keyword", searchInput.value.trim());
         if (append && nextPageCursor) params.set("Cursor", nextPageCursor);
         const response = await fetch(robloxApi("catalogSearch", params));
         if (!response.ok) throw new Error(`Catalog request failed (${response.status}).`);
         const result = await response.json();
-        const freshItems = (result.data || []).map(item => ({ ...item, id: String(item.id) }));
+        const freshItems = (result.data || [])
+          .map(item => ({ ...item, id: String(item.id) }))
+          .sort((a, b) => new Date(b.itemCreatedUtc || 0) - new Date(a.itemCreatedUtc || 0));
         freshItems.forEach(item => products.set(item.id, item));
         nextPageCursor = result.nextPageCursor || "";
         loadMoreButton.hidden = !nextPageCursor;
@@ -640,13 +654,20 @@
     }
 
     function startHeroUgcs() {
-      const thumbnails = [...products.values()].map(product => product.imageUrl).filter(Boolean);
+      const thumbnails = [...products.values()]
+        .sort((a, b) => new Date(b.itemCreatedUtc || 0) - new Date(a.itemCreatedUtc || 0))
+        .map(product => product.imageUrl)
+        .filter(Boolean);
       if (thumbnails.length < 1) return;
 
       const ugcElements = [
-        "heroUgcLeftTop",
+        "heroUgcLeft",
+        "heroUgcLeftUpper",
+        "heroUgcLeftMiddle",
         "heroUgcLeftBottom",
         "heroUgcRightTop",
+        "heroUgcRightUpper",
+        "heroUgcRightMiddle",
         "heroUgcRightBottom"
       ].map(id => document.getElementById(id)).filter(Boolean);
 
