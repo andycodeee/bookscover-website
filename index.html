@@ -100,12 +100,37 @@
       50% { transform: translateY(calc(-50% - 18px)) rotate(-5deg); }
     }
 
-    .hero-content { width: min(760px, 100%); display: flex; flex-direction: column; align-items: center; }
+    .hero-content { position: relative; z-index: 3; width: min(760px, 100%); display: flex; flex-direction: column; align-items: center; }
     .hero-logo { display: block; width: min(620px, 90vw); height: auto; margin: 0 auto 18px; filter: drop-shadow(0 18px 18px rgba(160, 19, 98, .16)); animation: heroFloat 4.8s ease-in-out infinite; }
 
     @keyframes heroFloat {
       0%, 100% { transform: translateY(0) rotate(-1deg); }
       50% { transform: translateY(-16px) rotate(1.5deg); }
+    }
+
+    .hero-ugc {
+      position: absolute;
+      z-index: 2;
+      width: clamp(75px, 9vw, 145px);
+      aspect-ratio: 1;
+      object-fit: contain;
+      opacity: 0;
+      filter: drop-shadow(0 12px 10px rgba(160, 19, 98, .2));
+      transition: opacity .65s ease, transform .65s cubic-bezier(.2,.8,.2,1);
+      pointer-events: none;
+    }
+    .hero-ugc.is-visible { opacity: 1; }
+    .hero-ugc-left-top { left: 9%; top: 16%; animation: ugcWobbleLeft 4s ease-in-out infinite; }
+    .hero-ugc-left-bottom { left: 12%; bottom: 13%; animation: ugcWobbleLeft 4.8s ease-in-out infinite reverse; }
+    .hero-ugc-right-top { right: 9%; top: 16%; animation: ugcWobbleRight 4.2s ease-in-out infinite; }
+    .hero-ugc-right-bottom { right: 12%; bottom: 13%; animation: ugcWobbleRight 4.9s ease-in-out infinite reverse; }
+    @keyframes ugcWobbleLeft {
+      0%, 100% { transform: rotate(-7deg) translateY(0); }
+      50% { transform: rotate(4deg) translateY(-12px); }
+    }
+    @keyframes ugcWobbleRight {
+      0%, 100% { transform: rotate(7deg) translateY(0); }
+      50% { transform: rotate(-4deg) translateY(-12px); }
     }
 
     .hero-tagline {
@@ -237,6 +262,11 @@
       .hero-side { width: 130px; max-height: 38vh; opacity: .75; }
       .hero-side-left { left: -82px; }
       .hero-side-right { right: -82px; }
+      .hero-ugc { width: clamp(48px, 14vw, 72px); }
+      .hero-ugc-left-top { left: 2%; top: 18%; }
+      .hero-ugc-left-bottom { left: 4%; bottom: 14%; }
+      .hero-ugc-right-top { right: 2%; top: 18%; }
+      .hero-ugc-right-bottom { right: 4%; bottom: 14%; }
       .topbar { min-height: 68px; padding: 8px 12px; gap: 8px; }
       .nav-brand img { width: 38px; height: 38px; }
       .nav-logo-text { font-size: 17px; }
@@ -273,6 +303,10 @@
     <section class="hero" id="home" aria-label="Books Cover">
       <img class="hero-side hero-side-left" src="noFilter (8).png" alt="">
       <img class="hero-side hero-side-right" src="noFilter (9).png" alt="">
+      <img class="hero-ugc hero-ugc-left-top" id="heroUgcLeftTop" alt="" loading="eager">
+      <img class="hero-ugc hero-ugc-left-bottom" id="heroUgcLeftBottom" alt="" loading="eager">
+      <img class="hero-ugc hero-ugc-right-top" id="heroUgcRightTop" alt="" loading="eager">
+      <img class="hero-ugc hero-ugc-right-bottom" id="heroUgcRightBottom" alt="" loading="eager">
       <div class="hero-content">
         <img class="hero-logo" src="logo.png" alt="Books Cover logo">
         <p class="hero-tagline">The best gyaru UGC on Roblox!</p>
@@ -356,6 +390,7 @@
     let catalogLoading = false;
     let searchMode = false;
     let searchTimer = null;
+    let heroUgcTimer = null;
 
     function robloxApi(endpoint, params = new URLSearchParams()) {
       const url = new URL("/api/roblox", window.location.origin);
@@ -471,6 +506,7 @@
         console.warn("Some UGC thumbnails could not be loaded:", error);
       }
       renderItems();
+      startHeroUgcs();
     }
 
     async function loadCatalog(append = false) {
@@ -601,6 +637,35 @@
       } catch (error) {
         console.error("Roblox avatar loading error:", error);
       }
+    }
+
+    function startHeroUgcs() {
+      const thumbnails = [...products.values()].map(product => product.imageUrl).filter(Boolean);
+      if (thumbnails.length < 1) return;
+
+      const ugcElements = [
+        "heroUgcLeftTop",
+        "heroUgcLeftBottom",
+        "heroUgcRightTop",
+        "heroUgcRightBottom"
+      ].map(id => document.getElementById(id)).filter(Boolean);
+
+      let currentIndex = 0;
+      window.clearInterval(heroUgcTimer);
+
+      const updateHeroUgcs = () => {
+        ugcElements.forEach((element, position) => {
+          element.classList.remove("is-visible");
+          window.setTimeout(() => {
+            element.src = thumbnails[(currentIndex + position) % thumbnails.length];
+            element.classList.add("is-visible");
+          }, 160);
+        });
+        currentIndex = (currentIndex + ugcElements.length) % thumbnails.length;
+      };
+
+      updateHeroUgcs();
+      heroUgcTimer = window.setInterval(updateHeroUgcs, 2000);
     }
 
     getGameInformation();
