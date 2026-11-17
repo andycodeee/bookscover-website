@@ -75,6 +75,29 @@
       display: grid;
       place-items: center;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-side {
+      position: absolute;
+      z-index: 1;
+      top: 50%;
+      width: clamp(180px, 22vw, 340px);
+      max-height: 68vh;
+      object-fit: contain;
+      filter: drop-shadow(0 18px 16px rgba(160, 19, 98, .22));
+      pointer-events: none;
+    }
+    .hero-side-left { left: clamp(-110px, -4vw, -20px); animation: sideTiltLeft 5.5s ease-in-out infinite; }
+    .hero-side-right { right: clamp(-110px, -4vw, -20px); animation: sideTiltRight 5.5s ease-in-out infinite; }
+    @keyframes sideTiltLeft {
+      0%, 100% { transform: translateY(-50%) rotate(-8deg); }
+      50% { transform: translateY(calc(-50% - 18px)) rotate(5deg); }
+    }
+    @keyframes sideTiltRight {
+      0%, 100% { transform: translateY(-50%) rotate(8deg); }
+      50% { transform: translateY(calc(-50% - 18px)) rotate(-5deg); }
     }
 
     .hero-content { width: min(760px, 100%); display: flex; flex-direction: column; align-items: center; }
@@ -122,6 +145,8 @@
       paint-order: normal;
       filter: none;
     }
+    .search::placeholder { color: #fff; opacity: 1; }
+    .search::-webkit-search-cancel-button { filter: brightness(0) invert(1); }
     .search { width: min(330px, 100%); }
     .search:focus { filter: none; }
     .search:focus-visible { outline: none; }
@@ -180,8 +205,20 @@
     .game-credits { margin-top: 64px; text-align: center; }
     .game-credits h2 { margin-bottom: 22px; font-size: 30px; }
     .credit-people { display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; }
-    .credit-person { display: flex; align-items: center; gap: 13px; min-width: 220px; padding: 13px 18px; border: 1px solid rgba(255, 97, 181, .38); border-radius: 12px; background: var(--paper); text-align: left; }
+    .credit-person {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      min-width: 220px;
+      padding: 13px 18px;
+      border: 1px solid rgba(255, 97, 181, .38);
+      border-radius: 12px;
+      background: var(--paper);
+      text-align: left;
+    }
     .credit-person img { width: 58px; height: 58px; border: 2px solid var(--pink); border-radius: 50%; background: #f7dce9; object-fit: cover; }
+    .credit-person .roblox-profile-icon { width: 30px; height: 30px; margin-left: auto; border: 0; border-radius: 6px; background: transparent; object-fit: contain; transition: transform .2s; }
+    .credit-person:hover .roblox-profile-icon, .credit-person:focus-visible .roblox-profile-icon { transform: translateY(-2px) rotate(4deg); }
     .credit-name { font-size: 18px; font-weight: 700; }
     .credit-role { margin-top: 3px; font-size: 13px; }
     .footer { display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap; padding: 24px 7%; border-top: 0; background: transparent; font-size: 16px; }
@@ -197,6 +234,9 @@
     }
 
     @media (max-width: 620px) {
+      .hero-side { width: 130px; max-height: 38vh; opacity: .75; }
+      .hero-side-left { left: -82px; }
+      .hero-side-right { right: -82px; }
       .topbar { min-height: 68px; padding: 8px 12px; gap: 8px; }
       .nav-brand img { width: 38px; height: 38px; }
       .nav-logo-text { font-size: 17px; }
@@ -231,9 +271,11 @@
 
   <main>
     <section class="hero" id="home" aria-label="Books Cover">
+      <img class="hero-side hero-side-left" src="noFilter (8).png" alt="">
+      <img class="hero-side hero-side-right" src="noFilter (9).png" alt="">
       <div class="hero-content">
         <img class="hero-logo" src="logo.png" alt="Books Cover logo">
-        <p class="hero-tagline">Cute gyaru UGC, made for the books.</p>
+        <p class="hero-tagline">The best gyaru UGC on Roblox!</p>
         <div class="hero-actions">
           <a class="hero-action" href="#shop">Browse UGC</a>
           <a class="hero-action" href="#game">Play Now</a>
@@ -273,8 +315,16 @@
         <div class="game-credits">
           <h2>Created by</h2>
           <div class="credit-people">
-            <div class="credit-person"><img id="andyAvatar" src="logo.png" alt="andycodee Roblox avatar" loading="lazy"><div><div class="credit-name">andycodee</div><div class="credit-role">Developer</div></div></div>
-            <div class="credit-person"><img id="elovainAvatar" src="logo.png" alt="elovain Roblox avatar" loading="lazy"><div><div class="credit-name">elovain</div><div class="credit-role">Developer</div></div></div>
+            <a class="credit-person" href="https://www.roblox.com/users/1234567890/profile" target="_blank" rel="noopener noreferrer" id="andyProfile">
+              <img id="andyAvatar" src="logo.png" alt="andycodee Roblox avatar" loading="lazy">
+              <div><div class="credit-name">andycodee</div><div class="credit-role">Developer</div></div>
+              <img class="roblox-profile-icon" src="roblox-logo (3).png" alt="View andycodee on Roblox">
+            </a>
+            <a class="credit-person" href="https://www.roblox.com/users/0987654321/profile" target="_blank" rel="noopener noreferrer" id="elovainProfile">
+              <img id="elovainAvatar" src="logo.png" alt="elovain Roblox avatar" loading="lazy">
+              <div><div class="credit-name">elovain</div><div class="credit-role">Developer</div></div>
+              <img class="roblox-profile-icon" src="roblox-logo (3).png" alt="View elovain on Roblox">
+            </a>
           </div>
         </div>
       </div>
@@ -531,7 +581,7 @@
       }
     }
 
-    async function loadRobloxAvatar(username, imageId) {
+    async function loadRobloxAvatar(username, imageId, profileId) {
       try {
         const searchParams = new URLSearchParams({ keyword: username, limit: "10" });
         const searchResponse = await fetch(robloxApi("userSearch", searchParams));
@@ -539,20 +589,23 @@
         const searchData = await searchResponse.json();
         const user = searchData.data?.find(item => item.name?.toLowerCase() === username.toLowerCase());
         if (!user) throw new Error("User not found.");
+
+        const profile = document.getElementById(profileId);
+        if (profile) profile.href = `https://www.roblox.com/users/${user.id}/profile`;
+
         const avatarParams = new URLSearchParams({ userIds: String(user.id), size: "150x150", format: "Png", isCircular: "true" });
         const avatarResponse = await fetch(robloxApi("avatarHeadshot", avatarParams));
         if (!avatarResponse.ok) throw new Error("Avatar unavailable.");
         const avatar = (await avatarResponse.json()).data?.[0]?.imageUrl;
-        if (avatarId === "andyAvatar") document.getElementById("andyAvatar").src = avatar;
-        if (avatarId === "elovainAvatar") document.getElementById("elovainAvatar").src = avatar;
+        if (avatar) document.getElementById(imageId).src = avatar;
       } catch (error) {
         console.error("Roblox avatar loading error:", error);
       }
     }
 
     getGameInformation();
-    loadRobloxAvatar("andycodee", "andyAvatar");
-    loadRobloxAvatar("elovain", "elovainAvatar");
+    loadRobloxAvatar("andycodee", "andyAvatar", "andyProfile");
+    loadRobloxAvatar("elovain", "elovainAvatar", "elovainProfile");
   </script>
 </body>
 </html>
